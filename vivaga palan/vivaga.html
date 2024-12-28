@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>விவாக பொருத்தம்</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body><nav>
+    <a href="file:///G:/Web%20browsing/Valluvar%20Palan/index.html#" class="logo">ஜோதிடர் <br>திரு. இராகபானந்தம்</a>
+    <div class="links">
+        <a href="file:///G:/Web%20browsing/Valluvar%20Palan/index.html#">Home</a>
+        <a href="#">Features</a>
+        <a href="#">Blog</a>
+        <a href="#">About us</a>
+    </div>
+    <div class="login">
+        <button class="signup">Get Started</button>
+        <button>Login</button>
+    </div>
+</nav>
+    
+    <header>
+        <div class="left"><h1>வரன் பலன் பார்க்க இங்கே ஜாதக பக்கதினை புகைபடம் எடுத்து அனுப்பவும் !</h1>
+    <!-- First camera and button --></div>
+    <h2>Camera 1</h2>
+    <video id="video1" autoplay playsinline style="width: 100%; max-width: 600px; border: 1px solid #ccc;"></video>
+    <canvas id="canvas1" style="display: none;"></canvas>
+    <br>
+    <button id="takePhoto1" style="margin-top: 10px; padding: 10px 20px;">மணமகன் ஜாதகத்தை பதியவும் </button>
+
+    <!-- Second camera and button -->
+    <h2>Camera 2</h2>
+    <video id="video2" autoplay playsinline style="width: 100%; max-width: 600px; border: 1px solid #ccc;"></video>
+    <canvas id="canvas2" style="display: none;"></canvas>
+    <br>
+    <button id="takePhoto2" style="margin-top: 10px; padding: 10px 20px;">மணமகள் ஜாதகத்தை பதியவும் </button>
+
+    <p id="errorMessage" style="color: red;"></p>
+
+    <script>
+        const videoElement1 = document.getElementById('video1');
+        const canvas1 = document.getElementById('canvas1');
+        const takePhotoButton1 = document.getElementById('takePhoto1');
+
+        const videoElement2 = document.getElementById('video2');
+        const canvas2 = document.getElementById('canvas2');
+        const takePhotoButton2 = document.getElementById('takePhoto2');
+
+        const errorMessage = document.getElementById('errorMessage');
+
+        async function startCamera(videoElement) {
+            try {
+                // Request access to the user's camera
+                const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                // Set the video stream as the source of the video element
+                videoElement.srcObject = stream;
+            } catch (error) {
+                // Handle errors (e.g., permission denied, no camera found)
+                errorMessage.textContent = 'Could not access the camera: ' + error.message;
+            }
+        }
+
+        function takePhoto(videoElement, canvas, photoKey) {
+            // Set the canvas dimensions to match the video
+            canvas.width = videoElement.videoWidth;
+            canvas.height = videoElement.videoHeight;
+            // Draw the current frame from the video onto the canvas
+            const context = canvas.getContext('2d');
+            context.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
+            // Convert the canvas to a data URL
+            const photoData = canvas.toDataURL('image/png');
+
+            // Create a link element to download the photo
+            const link = document.createElement('a');
+            link.href = photoData;
+            link.download = `${photoKey}.png`;
+            link.click();
+
+            alert(`Photo saved as ${photoKey}.png to your computer!`);
+        }
+
+        // Start cameras for both video elements
+        startCamera(videoElement1);
+        startCamera(videoElement2);
+
+        // Add event listeners to the buttons
+        takePhotoButton1.addEventListener('click', () => takePhoto(videoElement1, canvas1, 'photo1'));
+        takePhotoButton2.addEventListener('click', () => takePhoto(videoElement2, canvas2, 'photo2'));
+    </script>
+    </header>
+</body>
+</html>
